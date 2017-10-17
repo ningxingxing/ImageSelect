@@ -1,6 +1,7 @@
 package com.example.apple.imageselect;
 
 import android.content.Context;
+import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,8 +71,12 @@ public class MyTestAdapter extends RecyclerView.Adapter<MyTestAdapter.MyViewHold
 
 
         if (position==0){
+            holder.image.setVisibility(View.GONE);
+            holder.ivB.setVisibility(View.VISIBLE);
             holder.image.setBackgroundResource(R.drawable.ic_launcher);
         }else {
+            holder.ivB.setVisibility(View.GONE);
+            holder.image.setVisibility(View.VISIBLE);
             Glide.with(mContext)
                     .load(mSelectPath.get(position))
                     .centerCrop()
@@ -96,6 +101,7 @@ public class MyTestAdapter extends RecyclerView.Adapter<MyTestAdapter.MyViewHold
         ImageView image;
         LinearLayout llImage;
         TextView tvText;
+        ImageView ivB;
 
 
         public MyViewHolder(View itemView) {
@@ -104,6 +110,7 @@ public class MyTestAdapter extends RecyclerView.Adapter<MyTestAdapter.MyViewHold
             image = (ImageView) itemView.findViewById(R.id.image);
             llImage = (LinearLayout) itemView.findViewById(R.id.ll_image);
             tvText = (TextView)itemView.findViewById(R.id.tv_text);
+            ivB = (ImageView)itemView.findViewById(R.id.iv_b);
         }
     }
 
