@@ -37,12 +37,15 @@ public class ImageSelectActivity extends Activity implements LoaderManager.Loade
     private List<ImageData> mAllPath = new ArrayList<>();
     private ArrayList<String> mSelectPath = new ArrayList<>();
 
+    private TextView tvPreview;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_select);
 
         initView();
+        initData();
     }
 
     private void initView() {
@@ -57,7 +60,21 @@ public class ImageSelectActivity extends Activity implements LoaderManager.Loade
 
         mImageSelectAdapter = new ImageSelectAdapter(ImageSelectActivity.this, mAllPath);
         gvImageShow.setAdapter(mImageSelectAdapter);
+
+
+        tvPreview = (TextView)findViewById(R.id.tv_preview);
+        tvPreview.setOnClickListener(this);
+    }
+
+    private void initData() {
         getLoaderManager().initLoader(1, null, ImageSelectActivity.this);
+
+        //初始如果没有选中的图片，确定不能被点击
+        if (getSelect()==null || getSelect().size() ==0){
+            btnOk.setEnabled(false);
+        }else {
+            btnOk.setEnabled(true);
+        }
     }
 
 
@@ -75,6 +92,19 @@ public class ImageSelectActivity extends Activity implements LoaderManager.Loade
                 intent.putStringArrayListExtra("selectPath", mSelectPath);
                 ImageSelectActivity.this.setResult(RESULT_OK, intent);
                 finish();
+                break;
+
+            case R.id.tv_preview:
+                if (getSelect()!=null && getSelect().size()>0) {
+                    tvPreview.setEnabled(true);
+                    Intent intentP = new Intent(ImageSelectActivity.this, ImageShowActivity.class);
+                    intentP.putStringArrayListExtra("showImage", mSelectPath);
+                    startActivity(intentP);
+                }else {
+
+                    tvPreview.setEnabled(false);
+
+                }
                 break;
         }
     }
@@ -132,6 +162,7 @@ public class ImageSelectActivity extends Activity implements LoaderManager.Loade
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             int selectSize = getSelect().size();
+
             if (selectSize < 9) {
                 if (mAllPath.get(position).isSelect()) {
                     mAllPath.get(position).setSelect(false);
@@ -140,11 +171,18 @@ public class ImageSelectActivity extends Activity implements LoaderManager.Loade
                 }
                 tvSelectNumber.setText(getSelect().size() + "");
                 mImageSelectAdapter.notifyDataSetChanged();
+
+                if (getSelect().size() ==0){
+                    btnOk.setEnabled(false);
+                }else {
+                    btnOk.setEnabled(true);
+                }
+
             } else {
 
                 if (mAllPath.get(position).isSelect()){
                     mAllPath.get(position).setSelect(false);
-                    tvSelectNumber.setText(getSelect().size() + "");
+                    tvSelectNumber.setText(getSelect().size()  + "");
                     mImageSelectAdapter.notifyDataSetChanged();
                 }else {
                     Toast.makeText(getApplication(), "最多只能选择9张", Toast.LENGTH_SHORT).show();

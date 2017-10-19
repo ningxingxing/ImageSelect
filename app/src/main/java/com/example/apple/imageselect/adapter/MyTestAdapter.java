@@ -1,7 +1,6 @@
-package com.example.apple.imageselect;
+package com.example.apple.imageselect.adapter;
 
 import android.content.Context;
-import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.apple.imageselect.R;
 
 import java.util.ArrayList;
 

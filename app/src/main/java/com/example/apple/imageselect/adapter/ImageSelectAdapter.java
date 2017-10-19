@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.apple.imageselect.R;
@@ -60,6 +61,7 @@ public class ImageSelectAdapter extends BaseAdapter {
             convertView = View.inflate(mContext, R.layout.adapter_select_image, null);
             mViewHolder.ivSelect = (ImageView) convertView.findViewById(R.id.iv_select);
             mViewHolder.image = (ImageView) convertView.findViewById(R.id.image);
+            mViewHolder.tvBackground = (TextView) convertView.findViewById(R.id.tv_background);
             convertView.setTag(mViewHolder);
         } else {
             mViewHolder = (ViewHolder) convertView.getTag();
@@ -74,8 +76,10 @@ public class ImageSelectAdapter extends BaseAdapter {
 
         if (mImagePath.get(position).isSelect()) {
             mViewHolder.ivSelect.setVisibility(View.VISIBLE);
+            mViewHolder.tvBackground.setVisibility(View.VISIBLE);
         } else {
             mViewHolder.ivSelect.setVisibility(View.GONE);
+            mViewHolder.tvBackground.setVisibility(View.GONE);
         }
 
         return convertView;
@@ -84,5 +88,6 @@ public class ImageSelectAdapter extends BaseAdapter {
     class ViewHolder {
         ImageView ivSelect;
         ImageView image;
+        TextView tvBackground;
     }
 }
