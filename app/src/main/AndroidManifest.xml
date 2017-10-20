@@ -21,6 +21,8 @@
         <activity android:name=".ImageSelectActivity"/>
 
         <activity android:name=".ImageShowActivity"/>
+
+        <activity android:name=".EditImageActivity"/>
     </application>
 
 </manifest>

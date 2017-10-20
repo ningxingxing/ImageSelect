@@ -1,6 +1,7 @@
 package com.example.apple.imageselect;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -62,11 +63,13 @@ public class ImageShowActivity extends Activity implements View.OnClickListener 
 
         tvNumber = (TextView) findViewById(R.id.tv_number);
         btnFinish = (Button) findViewById(R.id.btn_finish);
+        btnFinish.setOnClickListener(this);
 
         imageShow = (ZoomImageView) findViewById(R.id.image_show);
         viewPager = (ViewPager) findViewById(R.id.view_pager);
 
         tvEdit = (TextView) findViewById(R.id.tv_edit);
+        tvEdit.setOnClickListener(this);
         cbSelect = (CheckBox) findViewById(R.id.cb_select);
 
 
@@ -84,47 +87,29 @@ public class ImageShowActivity extends Activity implements View.OnClickListener 
         tvNumber.setText("1/6");
         cbSelect.setChecked(true);
 
-        for (int i=0;i<mShowImageList.size();i++){
+        for (int i = 0; i < mShowImageList.size(); i++) {
             ImageData id = new ImageData();
             id.setPath(mShowImageList.get(i));
             id.setSelect(true);
             imageDataArrayList.add(id);
         }
 
+        //选中或取消
         cbSelect.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                if (isChecked){
+                if (isChecked) {
 
                     imageDataArrayList.get(currentPosition).setSelect(true);
-                }else {
+                } else {
                     imageDataArrayList.get(currentPosition).setSelect(false);
                 }
-
-                Log.e("nsc","position="+currentPosition + "imageDataArrayList.get(position).isSelect()="+imageDataArrayList.get(currentPosition).isSelect());
             }
         });
 
 
         final ImageView[] mImageViews = new ImageView[mShowImageList.size()];
-        viewPager.setCurrentItem(0);
-        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
 
         viewPager.setAdapter(new PagerAdapter() {
 
@@ -150,12 +135,11 @@ public class ImageShowActivity extends Activity implements View.OnClickListener 
             public void setPrimaryItem(View container, int position, Object object) {
 
 
-                tvNumber.setText((position+1) + "/" + mShowImageList.size());
+                tvNumber.setText((position + 1) + "/" + mShowImageList.size());
 
                 currentPosition = position;
 
-
-                Log.e("nsc","position="+position + "imageDataArrayList.get(position).isSelect()="+imageDataArrayList.get(position).isSelect());
+               // Log.e("nsc", "position=" + position + "imageDataArrayList.get(position).isSelect()=" + imageDataArrayList.get(position).isSelect());
 
                 if (imageDataArrayList.get(position).isSelect()) {
                     cbSelect.setChecked(true);
@@ -195,11 +179,47 @@ public class ImageShowActivity extends Activity implements View.OnClickListener 
                 break;
 
             case R.id.btn_finish:
+                Intent intent  = new Intent();
+                intent.putStringArrayListExtra("editFile",getAllEditFile());
+                intent.putExtra("isEdit",true);
+                setResult(RESULT_OK,intent);
+                finish();
+                break;
 
+            case R.id.tv_edit:
+                Intent intent1 = new Intent(ImageShowActivity.this,EditImageActivity.class);
+                intent1.putExtra("image",imageDataArrayList.get(currentPosition).getPath());
+                startActivity(intent1);
 
 
                 break;
         }
+
+    }
+
+    /**
+     * get all edit image
+     * @return
+     */
+    private ArrayList<String> getAllEditFile() {
+
+        ArrayList arrayList = new ArrayList();
+        if (arrayList != null && arrayList.size() > 0) {
+            arrayList.clear();
+        }
+
+        if (imageDataArrayList != null && imageDataArrayList.size() > 0) {
+
+            for (int i = 0; i < imageDataArrayList.size(); i++) {
+
+                if (imageDataArrayList.get(i).isSelect()) {
+                    arrayList.add(imageDataArrayList.get(i).getPath());
+                }
+            }
+
+        }
+
+        return arrayList;
 
     }
 }

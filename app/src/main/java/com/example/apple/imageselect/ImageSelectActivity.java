@@ -8,6 +8,7 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -99,7 +100,7 @@ public class ImageSelectActivity extends Activity implements LoaderManager.Loade
                     tvPreview.setEnabled(true);
                     Intent intentP = new Intent(ImageSelectActivity.this, ImageShowActivity.class);
                     intentP.putStringArrayListExtra("showImage", mSelectPath);
-                    startActivity(intentP);
+                    startActivityForResult(intentP,1);
                 }else {
 
                     tvPreview.setEnabled(false);
@@ -207,4 +208,24 @@ public class ImageSelectActivity extends Activity implements LoaderManager.Loade
         return mSelectPath;
     }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK && null != data) {
+
+            boolean isEdit = data.getBooleanExtra("isEdit",false);
+
+            mSelectPath = data.getStringArrayListExtra("editFile");
+            Log.e(TAG, "onActivityResult mSelectPath="+mSelectPath.size());
+            if (isEdit){
+                Intent intent = new Intent();
+                intent.putStringArrayListExtra("selectPath", mSelectPath);
+                ImageSelectActivity.this.setResult(RESULT_OK, intent);
+                finish();
+            }
+
+        }
+    }
 }
