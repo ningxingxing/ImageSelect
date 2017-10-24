@@ -121,6 +121,8 @@ public class StickerView extends FrameLayout {
     private KInputConnection inputConnection;
     private TextPaint paint;
 
+    private int color;
+
     public StickerView(Context context) {
         this(context, null);
     }
@@ -159,7 +161,7 @@ public class StickerView extends FrameLayout {
         this.setFocusable(true);
         this.setFocusableInTouchMode(true);
         // 获取 InputMethodManager
-       // inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        // inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         paint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         paint.setColor(Color.BLUE);
         float textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14, getResources().getDisplayMetrics());
@@ -182,10 +184,11 @@ public class StickerView extends FrameLayout {
             public boolean commitText(CharSequence text, int newCursorPosition) {
                 content.append(text);
 
-                removeAllStickers();
+                remove(handlingSticker);
                 addSticker(new TextSticker(getContext())
                         .setText(content.toString())
-                        .setMaxTextSize(14)
+                        .setTextColor(getColor())
+                        .setMaxTextSize(16)
                         .resizeText(), Sticker.Position.TOP);
 
                 invalidate();
@@ -200,10 +203,11 @@ public class StickerView extends FrameLayout {
 
 
                 if (content != null && content.length() >= 0) {
-                    removeAllStickers();
+                    remove(handlingSticker);
                     addSticker(new TextSticker(getContext())
                             .setText(content.toString() + " ")
-                            .setMaxTextSize(14)
+                            .setMaxTextSize(16)
+                            .setTextColor(getColor())
                             .resizeText(), Sticker.Position.TOP);
                 }
                 invalidate();
@@ -212,6 +216,13 @@ public class StickerView extends FrameLayout {
         return inputConnection;
     }
 
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
+    }
 
     public void configDefaultIcons() {
         BitmapStickerIcon deleteIcon = new BitmapStickerIcon(
@@ -277,7 +288,8 @@ public class StickerView extends FrameLayout {
     @Override
     protected void dispatchDraw(Canvas canvas) {
         super.dispatchDraw(canvas);
-        new StaticLayout(content, paint, getWidth(), Layout.Alignment.ALIGN_NORMAL, 1.5f, 0, false).draw(canvas);
+        //new StaticLayout(content, paint, getWidth(), Layout.Alignment.ALIGN_NORMAL, 1.5f, 0, false).draw(canvas);
+        new StaticLayout(" ", paint, getWidth(), Layout.Alignment.ALIGN_NORMAL, 1.5f, 0, false).draw(canvas);
         drawStickers(canvas);
     }
 

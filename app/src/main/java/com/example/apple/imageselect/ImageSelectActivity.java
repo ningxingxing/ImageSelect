@@ -88,14 +88,14 @@ public class ImageSelectActivity extends Activity implements LoaderManager.Loade
                 finish();
                 break;
 
-            case R.id.btn_ok:
+            case R.id.btn_ok://返回数据给MainActivity
                 Intent intent = new Intent();
                 intent.putStringArrayListExtra("selectPath", mSelectPath);
                 ImageSelectActivity.this.setResult(RESULT_OK, intent);
                 finish();
                 break;
 
-            case R.id.tv_preview:
+            case R.id.tv_preview://跳转到ImageShowActivity
                 if (getSelect()!=null && getSelect().size()>0) {
                     tvPreview.setEnabled(true);
                     Intent intentP = new Intent(ImageSelectActivity.this, ImageShowActivity.class);
@@ -216,6 +216,9 @@ public class ImageSelectActivity extends Activity implements LoaderManager.Loade
         if (resultCode == RESULT_OK && null != data) {
 
             boolean isEdit = data.getBooleanExtra("isEdit",false);
+            if (mSelectPath !=null && mSelectPath.size()>0){
+                mSelectPath.clear();
+            }
 
             mSelectPath = data.getStringArrayListExtra("editFile");
             Log.e(TAG, "onActivityResult mSelectPath="+mSelectPath.size());

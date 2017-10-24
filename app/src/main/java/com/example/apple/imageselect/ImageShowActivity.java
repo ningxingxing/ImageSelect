@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.apple.imageselect.data.ImageData;
+import com.example.apple.imageselect.data.SharedPreferenceInfo;
 import com.example.apple.imageselect.view.ZoomImageView;
 
 import java.io.File;
@@ -27,6 +28,7 @@ import java.util.List;
  */
 
 public class ImageShowActivity extends Activity implements View.OnClickListener {
+    private final String TAG = "ImageShowActivity";
 
     private ImageView ivBack;
     private TextView tvNumber;
@@ -37,7 +39,7 @@ public class ImageShowActivity extends Activity implements View.OnClickListener 
 
     private TextView tvEdit;
     private CheckBox cbSelect;
-    private List<String> mShowImageList = new ArrayList<>();
+    private ArrayList<String> mShowImageList = new ArrayList<>();
     private ArrayList<ImageData> imageDataArrayList = new ArrayList<>();
 
     private int currentPosition = 0;
@@ -78,8 +80,6 @@ public class ImageShowActivity extends Activity implements View.OnClickListener 
     private void getData() {
 
         mShowImageList = getIntent().getStringArrayListExtra("showImage");
-
-
     }
 
     private void initData() {
@@ -139,7 +139,7 @@ public class ImageShowActivity extends Activity implements View.OnClickListener 
 
                 currentPosition = position;
 
-               // Log.e("nsc", "position=" + position + "imageDataArrayList.get(position).isSelect()=" + imageDataArrayList.get(position).isSelect());
+                // Log.e("nsc", "position=" + position + "imageDataArrayList.get(position).isSelect()=" + imageDataArrayList.get(position).isSelect());
 
                 if (imageDataArrayList.get(position).isSelect()) {
                     cbSelect.setChecked(true);
@@ -178,18 +178,20 @@ public class ImageShowActivity extends Activity implements View.OnClickListener 
 
                 break;
 
-            case R.id.btn_finish:
-                Intent intent  = new Intent();
-                intent.putStringArrayListExtra("editFile",getAllEditFile());
-                intent.putExtra("isEdit",true);
-                setResult(RESULT_OK,intent);
+            case R.id.btn_finish://返回数据给MainActivity
+                Intent intent = new Intent();
+                intent.putStringArrayListExtra("editFile", getAllEditFile());
+                intent.putExtra("isEdit", true);
+                setResult(RESULT_OK, intent);
                 finish();
                 break;
 
             case R.id.tv_edit:
-                Intent intent1 = new Intent(ImageShowActivity.this,EditImageActivity.class);
-                intent1.putExtra("image",imageDataArrayList.get(currentPosition).getPath());
-                startActivity(intent1);
+                SharedPreferenceInfo.saveEditImage(getApplication(),imageDataArrayList.get(currentPosition).getPath());
+                Intent intent1 = new Intent(ImageShowActivity.this, EditImageActivity.class);
+                intent1.putExtra("image", imageDataArrayList.get(currentPosition).getPath());
+                intent1.putStringArrayListExtra("imageList",mShowImageList);
+                startActivityForResult(intent1, 1);
 
 
                 break;
@@ -199,6 +201,7 @@ public class ImageShowActivity extends Activity implements View.OnClickListener 
 
     /**
      * get all edit image
+     *
      * @return
      */
     private ArrayList<String> getAllEditFile() {
@@ -207,7 +210,7 @@ public class ImageShowActivity extends Activity implements View.OnClickListener 
         if (arrayList != null && arrayList.size() > 0) {
             arrayList.clear();
         }
-
+        Log.e(TAG,"getAllEditFile imageDataArrayList="+imageDataArrayList.size());
         if (imageDataArrayList != null && imageDataArrayList.size() > 0) {
 
             for (int i = 0; i < imageDataArrayList.size(); i++) {
@@ -221,6 +224,33 @@ public class ImageShowActivity extends Activity implements View.OnClickListener 
 
         return arrayList;
 
+    }
+
+    /**
+     * 获取EditImageActivity返回的数据
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (data != null && resultCode == RESULT_OK) {
+            if (mShowImageList!=null && mShowImageList.size()>0){
+                mShowImageList.clear();
+            }
+
+            if (imageDataArrayList!=null && imageDataArrayList.size()>0){
+                imageDataArrayList.clear();
+            }
+
+            mShowImageList = data.getStringArrayListExtra("editImage");
+            Log.e(TAG,"imageList="+mShowImageList.size());
+            if (mShowImageList!=null && mShowImageList.size()>0){
+                initData();
+            }
+        }
     }
 }
 

@@ -109,9 +109,9 @@ public class MainActivity extends AppCompatActivity {
 
                 int position = viewHolder.getAdapterPosition();
                 Log.e("nsc", "onSwiped position=" + position + " direction＝"+viewHolder.getPosition());
-               // mData.remove(position);
+                // mData.remove(position);
                 if (position==0) {
-                 myTestAdapter.notifyDataSetChanged();
+                    myTestAdapter.notifyDataSetChanged();
                 }else {
                     if (!isMove && selectPath!=null && selectPath.size()>0) {
                         selectPath.remove(position);
