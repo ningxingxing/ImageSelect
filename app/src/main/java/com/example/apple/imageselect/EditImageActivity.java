@@ -12,6 +12,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -266,23 +268,7 @@ public class EditImageActivity extends Activity implements View.OnClickListener 
         /**
          * 添加手绘图片
          */
-        Matrix matrix = new Matrix();
-        matrix.postScale(1, 1);
-        mBitmap = BitmapFactory.decodeFile(imagePath).copy(Bitmap.Config.ARGB_8888, true);
-        mBitmap = Bitmap.createBitmap(mBitmap, 0, 0, mBitmap.getWidth(), mBitmap.getHeight(), matrix, true);
-        canvas = new Canvas(mBitmap);
-        mPaint = new Paint();
-        if (mColor!=0) {
-            mPaint.setColor(mColor);
-        }else {
-            mPaint.setColor(Color.RED);
-        }
-        mPaint.setAntiAlias(true);
-        mPaint.setStrokeWidth(5);
-        mPaint.setTextSize(30);
-        ivShow.setImageMatrix(matrix);
-        ivShow.setImageBitmap(mBitmap);
-        canvas.drawBitmap(mBitmap, 0, 0, mPaint);
+       addBitmap();
 
         ivShow.setOnTouchListener(new View.OnTouchListener() {
 
@@ -310,6 +296,15 @@ public class EditImageActivity extends Activity implements View.OnClickListener 
                         downx = upx;
                         downy = upy;
                         break;
+
+                    case MotionEvent.ACTION_POINTER_2_DOWN:
+                        mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+                        canvas.drawPaint(mPaint);
+                        mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC));
+                        //Log.e(TAG,"ACTION_POINTER_2_DOWN");
+                        addBitmap();
+
+                        break;
                     default:
                         break;
                 }
@@ -318,6 +313,26 @@ public class EditImageActivity extends Activity implements View.OnClickListener 
             }
         });
 
+    }
+
+    private void addBitmap(){
+        Matrix matrix = new Matrix();
+        matrix.postScale(1, 1);
+        mBitmap = BitmapFactory.decodeFile(imagePath).copy(Bitmap.Config.ARGB_8888, true);
+        mBitmap = Bitmap.createBitmap(mBitmap, 0, 0, mBitmap.getWidth(), mBitmap.getHeight(), matrix, true);
+        canvas = new Canvas(mBitmap);
+        mPaint = new Paint();
+        if (mColor!=0) {
+            mPaint.setColor(mColor);
+        }else {
+            mPaint.setColor(Color.RED);
+        }
+        mPaint.setAntiAlias(true);
+        mPaint.setStrokeWidth(5);
+        mPaint.setTextSize(30);
+        ivShow.setImageMatrix(matrix);
+        ivShow.setImageBitmap(mBitmap);
+        canvas.drawBitmap(mBitmap, 0, 0, mPaint);
     }
 
     /**
