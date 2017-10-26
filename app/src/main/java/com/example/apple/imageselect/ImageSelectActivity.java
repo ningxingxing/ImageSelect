@@ -127,6 +127,11 @@ public class ImageSelectActivity extends Activity implements LoaderManager.Loade
         return cursorLoader;
     }
 
+    /**
+     * 获取数据库图片数据
+     * @param loader
+     * @param cursor
+     */
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         if (mAllPath != null && mAllPath.size() > 0) {
@@ -164,7 +169,7 @@ public class ImageSelectActivity extends Activity implements LoaderManager.Loade
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             int selectSize = getSelect().size();
 
-            if (selectSize < 9) {
+            if (selectSize < 9) {//用于设置需要获取的图片数量
                 if (mAllPath.get(position).isSelect()) {
                     mAllPath.get(position).setSelect(false);
                 } else {
@@ -179,7 +184,7 @@ public class ImageSelectActivity extends Activity implements LoaderManager.Loade
                     btnOk.setEnabled(true);
                 }
 
-            } else {
+            } else {//如果图片数量超过不再设置图片为选中，并且显示设置的最大文件数量
 
                 if (mAllPath.get(position).isSelect()){
                     mAllPath.get(position).setSelect(false);
@@ -193,6 +198,10 @@ public class ImageSelectActivity extends Activity implements LoaderManager.Loade
         }
     }
 
+    /**
+     * 获取选中的图片
+     * @return
+     */
     private List<String> getSelect() {
 
         if (mSelectPath != null && mSelectPath.size() > 0) {

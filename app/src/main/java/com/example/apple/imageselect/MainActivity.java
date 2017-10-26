@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
+        //用于recycleView不同item中间的切换和右滑删除图片
         ItemTouchHelper.Callback mCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT, ItemTouchHelper.RIGHT) {
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
                     isMove = true;
                     myTestAdapter.notifyItemMoved(fromPosition, toPosition);
                     //返回true表示执行拖动
-                    Log.e("nsc", "onMove fromPosition=" + fromPosition + " toPosition=" + toPosition);
+                    Log.e(TAG, "onMove fromPosition=" + fromPosition + " toPosition=" + toPosition);
                 }
                 return true;
             }
@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
 
                 int position = viewHolder.getAdapterPosition();
-                Log.e("nsc", "onSwiped position=" + position + " direction＝"+viewHolder.getPosition());
+                Log.e(TAG, "onSwiped position=" + position + " direction＝"+viewHolder.getPosition());
                 // mData.remove(position);
                 if (position==0) {
                     myTestAdapter.notifyDataSetChanged();
@@ -158,6 +158,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * 用于更新显示返回的图片
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

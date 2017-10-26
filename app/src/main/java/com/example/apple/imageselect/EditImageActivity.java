@@ -297,7 +297,7 @@ public class EditImageActivity extends Activity implements View.OnClickListener 
                         downy = upy;
                         break;
 
-                    case MotionEvent.ACTION_POINTER_2_DOWN:
+                    case MotionEvent.ACTION_POINTER_2_DOWN://两个手指点下的时候清屏
                         mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
                         canvas.drawPaint(mPaint);
                         mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC));
@@ -412,7 +412,7 @@ public class EditImageActivity extends Activity implements View.OnClickListener 
 
                 break;
 
-            case R.id.iv_edit:
+            case R.id.iv_edit://弹出选择颜色对话框并设置sticker文字显示的颜色
                 dialog = new ColorPicker(EditImageActivity.this, getResources().getColor(R.color.colorPrimary), getResources().getString(R.string.app_name), new ColorPicker.OnColorChangedListener() {
                     @Override
                     public void colorChanged(int color) {

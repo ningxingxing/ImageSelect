@@ -6,8 +6,8 @@ package com.example.apple.imageselect.data;
 
 public class ImageData {
 
-    private String path;
-    private boolean isSelect;
+    private String path;//文件路径
+    private boolean isSelect;//文件是否选中
 
     public ImageData() {
     }

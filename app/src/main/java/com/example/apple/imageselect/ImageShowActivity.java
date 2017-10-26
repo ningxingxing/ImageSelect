@@ -86,7 +86,7 @@ public class ImageShowActivity extends Activity implements View.OnClickListener 
 
         tvNumber.setText("1/6");
         cbSelect.setChecked(true);
-
+        //将图片存储到imageDataArrayList中
         for (int i = 0; i < mShowImageList.size(); i++) {
             ImageData id = new ImageData();
             id.setPath(mShowImageList.get(i));
@@ -134,7 +134,7 @@ public class ImageShowActivity extends Activity implements View.OnClickListener 
             @Override
             public void setPrimaryItem(View container, int position, Object object) {
 
-
+                //这里显示图片的数量还有设置图片是否被选中
                 tvNumber.setText((position + 1) + "/" + mShowImageList.size());
 
                 currentPosition = position;
